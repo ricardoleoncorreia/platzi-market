@@ -39,6 +39,20 @@
 * Import the project in IntelliJ IDEA
 * Import `build.gradle`. Open as project.
 
+# JPA
+
+* JPA is a specification for accessing, persisting, and managing data between Java objects and relational databases (ORMs).
+* Some JPA implementations are Hibernate, EclipseLink, TopLink and ObjectDB.
+* It uses annotations like `@Entity`, `@Table`, `@Column`, `@Id`, `@EmbededId`, `@GeneratedValue`, `@OneToMany`, `@ManyToOne`, etc.
+
+# Spring Data
+
+* Contains support for data technologies like SQL, MongoDB, Redis, Cassandra, etc.
+* Spring Data JPA:
+  * Provides repository support for the Java Persistence API (JPA).
+  * Repositories are interfaces with methods supporting creating, reading, updating, and deleting records (JPARepository, CrudRepository & PagingAndSortingRepository).
+  * Provide transparent auditing, query methods, and derived queries.
+
 # References
 
 * [Common Application Properties](https://docs.spring.io/spring-boot/appendix/application-properties/index.html)

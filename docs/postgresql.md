@@ -1,5 +1,17 @@
 # PostgreSQL
 
+# Table of Contents
+
+- [Basics](#basics)
+- [Console](#console)
+- [Configuration](#configuration)
+- [Data Types](#data-types)
+- [Entity Relationships Diagram](#entity-relationships-diagram)
+- [Tables](#tables)
+- [Partitioning](#partitioning)
+- [Roles](#roles)
+- [References](#references)
+
 ### Basics
 * PostgreSQL is a powerful, open-source object-relational database engine.
 * For databases there are a few main elements:

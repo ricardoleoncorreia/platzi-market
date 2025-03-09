@@ -1,5 +1,16 @@
 # Spring Boot
 
+### Table of Contents
+
+- [Technologies used](#technologies-used)
+- [About Java](#about-java)
+- [Tools Installation Links](#tools-installation-links)
+- [Auto Contained Applications](#auto-contained-applications)
+- [Project setup](#project-setup)
+- [Open Project](#open-project)
+- [JPA](#jpa)
+- [Spring Data](#spring-data)
+
 ### Technologies used
 
 * Spring Data JPA: connect to sql database
@@ -17,7 +28,7 @@
 * [Insomnia](https://insomnia.rest/)
 * [PostgreSQL](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads/)
 
-### Autocontained Applications
+### Auto Contained Applications
 
 * Spring Boo uses Tomcat (default), Jetty or Undertow servers.
 * Leave all the configurations to Spring Boot.

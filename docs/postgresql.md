@@ -1,6 +1,6 @@
 # PostgreSQL
 
-# Table of Contents
+### Table of Contents
 
 - [Basics](#basics)
 - [Console](#console)
@@ -25,7 +25,7 @@
 * PL/PgSQL allows to create functions and procedures in PostgreSQL.
 * Supports ACID properties (Atomicity, Consistency, Isolation, Durability).
     * Atomicity: you can break an operation in small chunk that will execute one by one. If there is an error in one of these, a rollback mechanism will apply to revert incomplete changes.
-    * Consistency: you can relate tables to make data consistent.
+    * Consistency: you can relate tables to make data consistent (foreign keys).
     * Isolation: operations are isolated from each other. You can execute reads and writes without interference.
     * Durability: data is saved even if the system crashes.
 
@@ -195,7 +195,21 @@ Available actions:
     * `ALTER DEFAULT PRIVILEGES IN SCHEMA schema_name GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO group_name;`
     * `ALTER DEFAULT PRIVILEGES IN SCHEMA schema_name GRANT USAGE ON SEQUENCES TO group_name;`
 
+### Foreign Keys
+
+Components:
+
+* Origin table: table that contains the foreign key.
+* Destination table: table that contains the primary key.
+* Actions:
+    * `CASCADE`: delete or update the row in the destination table.
+    * `SET NULL`: set the foreign key to null.
+    * `RESTRICT`: restrict the delete or update operation.
+    * `NO ACTION`: same as `RESTRICT`.
+    * `SET DEFAULT`: set the foreign key to the default value.
+
 ### References
 
 * [PostgreSQL Data Types](https://www.postgresql.org/docs/11/datatype.html)
 * [Most common data types](https://www.todopostgresql.com/postgresql-data-types-los-tipos-de-datos-mas-utilizados/)
+* [Mockaroo](https://www.mockaroo.com/): generate random data.

@@ -72,7 +72,7 @@
     * Location: `SHOW hba_file;`.
     * Helpful for:
         * Allows more specificity for the roles and access to databases for each user.
-        * Contains a table with type (local, host, hostssl, hostnossl), database name, username, IP address and method (trust, md5, etc).
+        * Contains a table with type (local, host, hostssl, hostnossl), database name, username, IP address and method (trust, md5, etc.).
 * pg_ident.conf: user mapping configuration file.
     * Location: `SHOW ident_file;`.
     * Useful for mapping OS user with PostgreSQL user.
@@ -316,6 +316,41 @@ EXECUTE FUNCTION function_name();
 ```sql
 DROP TRIGGER IF EXISTS trigger_name ON table_name;
 ```
+
+### Connect to remote server
+
+* An extension is needed to connect to a remote server. For example, `dblink` by using `CREATE EXTENSION dblink;`.
+* Usage is a below:
+
+```sql
+SELECT * FROM dblink('host=remote_host
+    port=remote_port
+    user=remote_user
+    password=remote_password
+    dbname=remote_db',
+    'SELECT * FROM remote_table'
+) AS remote_data (column1 data_type, column2 data_type);
+```
+
+### Transactions
+
+* A transaction is a set of operations that are executed as a single unit.
+* It is useful to ensure that all operations are executed when there is no error. Otherwise, a rollback will be executed.
+* In the logic, the transaction can end with a `COMMIT` or `ROLLBACK`.
+
+```sql
+BEGIN;
+INSERT INTO table_name (column1, column2) VALUES (value1, value2);
+UPDATE table_name SET column1 = value1 WHERE column2 = value2;
+DELETE FROM table_name WHERE column1 = value1;
+COMMIT;
+```
+
+### Extensions
+
+* Extensions are additional features that can be added to PostgreSQL.
+* They are already installed but not enabled. You can enable them by using `CREATE EXTENSION extension_name;`.
+* List of extensions can be reviewed by using `SELECT * FROM pg_available_extensions;` or in the [documentation](https://www.postgresql.org/docs/17/contrib.html).
 
 ### References
 

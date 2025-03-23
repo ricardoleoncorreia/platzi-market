@@ -208,6 +208,115 @@ Components:
     * `NO ACTION`: same as `RESTRICT`.
     * `SET DEFAULT`: set the foreign key to the default value.
 
+### Joins
+
+* Inner join: `SELECT * FROM table1 INNER JOIN table2 ON table1.column = table2.column;`
+* Left join: `SELECT * FROM table1 LEFT JOIN table2 ON table1.column = table2.column;`
+* Right join: `SELECT * FROM table1 RIGHT JOIN table2 ON table1.column = table2.column;`
+* Left outer join: `SELECT * FROM table1 LEFT OUTER JOIN table2 ON table1.column = table2.column;`
+* Right outer join: `SELECT * FROM table1 RIGHT OUTER JOIN table2 ON table1.column = table2.column;`
+* Full outer join: `SELECT * FROM table1 FULL OUTER JOIN table2 ON table1.column = table2.column;`
+
+### Special Functions
+
+* __ON CONFLICT DO__. Tells what to do when a conflict occurs.
+    * `INSERT INTO table_name (column1, column2) VALUES (value1, value2) ON CONFLICT (column1) DO NOTHING;`
+    * `INSERT INTO table_name (column1, column2) VALUES (value1, value2) ON CONFLICT (column1) DO UPDATE SET column2 = value2;`
+* __RETURNING__. Returns the inserted or updated row.
+    * `INSERT INTO table_name (column1, column2) VALUES (value1, value2) RETURNING *;`
+    * `UPDATE table_name SET column1 = value1 WHERE column2 = value2 RETURNING *;`
+* __LIKE__. Search for a pattern.
+    * `SELECT * FROM table_name WHERE column_name LIKE 'pattern';`
+    * `SELECT * FROM table_name WHERE column_name LIKE 'pattern%' ESCAPE 'escape_character';`
+* __ILIKE__. Case-insensitive search for a pattern.
+    * `SELECT * FROM table_name WHERE column_name ILIKE 'pattern';`
+    * `SELECT * FROM table_name WHERE column_name ILIKE 'pattern%' ESCAPE 'escape_character';`
+* __IS__ && __IS NOT__. Check if a value is null.
+    * `SELECT * FROM table_name WHERE column_name IS NULL;`
+    * `SELECT * FROM table_name WHERE column_name IS NOT NULL;`
+
+### Advanced Functions
+
+* __COALESCE__. Returns the first non-null value.
+    * `SELECT COALESCE(column_name, 'default_value') FROM table_name;`
+* __NULLIF__. Returns null if two values are equal.
+    * `SELECT NULLIF(column1, column2) FROM table_name;`
+* __GREATEST__. Returns the greatest value.
+    * `SELECT GREATEST(column1, column2) FROM table_name;`
+* __LEAST__. Returns the least value.
+    * `SELECT LEAST(column1, column2) FROM table_name;`
+* ANONYMOUS BLOCKS. Allows to create a block of code.
+    * `CASE WHEN condition THEN statement ELSE statement END;`
+
+### Views
+
+* Materialized view: stores the result of the query in memory. Helpful for queries on sets of data that won't change (e.g. yesterday's results).
+  * Create view: `CREATE MATERIALIZED VIEW view_name AS SELECT * FROM table_name;`
+  * Use view: `SELECT * FROM view_name;`
+  * Refresh view: `REFRESH MATERIALIZED VIEW view_name;`
+* Volatile view: doesn't store the result of the query. Data is always fresh.
+  * Create view: `CREATE VIEW view_name AS SELECT * FROM table_name;`
+  * Use view: `SELECT * FROM view_name;`
+
+### Stored Procedures (PL/pgSQL)
+
+Allows to create functions and procedures. Some examples:
+
+```sql
+CREATE OR REPLACE FUNCTION function_name (parameter1 data_type, parameter2 data_type)
+RETURNS data_type AS $$
+DECLARE
+    variable data_type;
+BEGIN
+    FOR variable IN SELECT * FROM table_name LOOP
+        RAISE NOTICE 'Value: %', variable.column_name;
+        variable := variable + 1;
+    END LOOP;
+    variable := variable + parameter1 + parameter2;
+    RETURN variable;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+```sql
+SELECT function_name(1, 2);
+```
+
+```sql
+DROP FUNCTION IF EXISTS function_name(data_type);
+```
+
+### Triggers
+
+A trigger is a function that is executed when a specific event occurs (e.g. insert, update, delete).
+
+```sql
+CREATE OR REPLACE FUNCTION function_name ()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        RAISE NOTICE 'Inserting row';
+    ELSIF TG_OP = 'UPDATE' THEN
+        RAISE NOTICE 'Updating row';
+    ELSIF TG_OP = 'DELETE' THEN
+        RAISE NOTICE 'Deleting row';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+```sql
+CREATE TRIGGER trigger_name
+AFTER INSERT OR UPDATE OR DELETE ON table_name
+FOR EACH ROW
+EXECUTE FUNCTION function_name();
+```
+
+```sql
+DROP TRIGGER IF EXISTS trigger_name ON table_name;
+```
+
 ### References
 
 * [PostgreSQL Data Types](https://www.postgresql.org/docs/11/datatype.html)

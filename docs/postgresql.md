@@ -352,6 +352,65 @@ COMMIT;
 * They are already installed but not enabled. You can enable them by using `CREATE EXTENSION extension_name;`.
 * List of extensions can be reviewed by using `SELECT * FROM pg_available_extensions;` or in the [documentation](https://www.postgresql.org/docs/17/contrib.html).
 
+### Backup and Restore
+
+* Backup:
+    * `pg_dump -U user_name -h host_name -d database_name -f file_name.sql`
+    * `pg_dumpall -U user_name -h host_name -f file_name.sql`
+* Restore:
+    * `psql -U user_name -h host_name -d database_name -f file_name.sql`
+    * `psql -U user_name -h host_name -f file_name.sql`
+
+### Maintenance
+
+* Vacuum:
+  * Reclaims storage occupied by dead tuples: `VACUUM table_name;`
+  * Has 3 strategies:
+    * `VACUUM (FULL) table_name;`: reclaims storage and reorders the table.
+    * `VACUUM (FREEZE) table_name;`: freezes the table.
+    * `VACUUM (ANALYZE) table_name;`: collects statistics.
+* Analyze: collects statistics about the contents of tables.
+    * `ANALYZE table_name;`
+* Reindex: rebuilds indexes.
+    * `REINDEX table_name;`
+* Cluster: reorders the table based on an index.
+    * `CLUSTER table_name USING index_name;`
+
+### Replication
+
+* Master-Slave:
+    * Master: main server that receives write operations.
+    * Slave: secondary server that receives read operations.
+    * Configuration:
+        * Set up master server:
+            * `postgresql.conf`:
+                * `wal_level = logical`: write-ahead log level.
+                * `max_wal_senders = 3`: maximum number of senders.
+                * `archive_mode = on`: archive mode.
+                * `archive_command = 'cp %p /path/to/archive/%f'`: archive command.
+            * `pg_hba.conf`:
+                * `host replication user_name slave_ip/32 md5`
+        * Set up slave server:
+            * `postgresql.conf`:
+                * `hot_standby = on`: allows read-only queries.
+            * `pg_basebackup -h host_name -R -D /path/to/data -U user_name`: backup the master.
+        * Other configurations:
+            * `wal_keep_segments = 8`: number of segments to keep.
+            * `max_replication_slots = 3`: maximum number of replication slots.
+            * `max_wal_size = 1GB`: maximum size of write-ahead log.
+            * `min_wal_size = 80MB`: minimum size of write-ahead log.
+            * `synchronous_standby_names = 'slave1, slave2'`: synchronous replication.
+        * Other commands:
+            * `pg_ctl start -D /path/to/data`: start the server.
+            * `pg_ctl stop -D /path/to/data`: stop the server.
+            * `pg_ctl reload -D /path/to/data`: reload the server.
+            * `pg_ctl status -D /path/to/data`: check the status of the server.
+
+**Notes**:
+
+* On replica databases, it won't be possible to execute write operations.
+* Once the replica is set up, it will have the same configs as the master (e.g. password).
+
 ### References
 
 * [PostgreSQL Data Types](https://www.postgresql.org/docs/11/datatype.html)
